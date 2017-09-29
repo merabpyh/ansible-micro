@@ -1,0 +1,48 @@
+---
+- name: Install git, java1.7
+  yum:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - git
+    - java-1.7.0-openjdk-devel
+
+- name: Start docker
+  systemd:
+    name: docker
+    state: started
+
+- name: Enable docker
+  systemd:
+    name: docker
+    enabled: yes
+
+- name: Check docker
+  command: docker --version
+
+- name: Create projects dir
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0755
+  with_items:
+    - /etc/webprog1
+    - /etc/webprog1/docker/
+    - /etc/webprog1/repo/
+
+- name: Put scripts for docker
+  template: 
+    src: "{{ item }}"
+    dest: /etc/webprog1/docker/
+    mode: 0755
+  with_items:
+    - run-proxy.sh
+    - run.sh
+    - build.sh
+    - docker-entrypoint.sh
+    - Dockerfile
+
+- name: Clone webprog1 repo from github
+  git:
+    repo: 'https://github.com/merabpyh/webprog.git'
+    dest: /etc/webprog1/repo/

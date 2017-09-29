@@ -1,0 +1,9 @@
+---
+- hosts: test-onefactor-centos7
+  user: docker
+  sudo: yes
+
+  roles:
+    - setup
+
+  tags: setup

@@ -1,5 +1,5 @@
 ---
-- hosts: test-onefactor-centos7
+- hosts: test-centos7
   user: docker
   sudo: yes
 

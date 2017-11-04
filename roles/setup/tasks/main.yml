@@ -1,5 +1,4 @@
 ---
--
 
 - name: Install git, java1.7
   yum:

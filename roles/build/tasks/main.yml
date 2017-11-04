@@ -1,0 +1,6 @@
+---
+
+- name: Install docker
+  command: echo 'test'
+
+

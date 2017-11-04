@@ -1,6 +1,4 @@
 ---
 
-- name: test build
+- name: test deploy
   command: echo 'test'
-
-

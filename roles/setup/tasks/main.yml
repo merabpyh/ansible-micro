@@ -7,14 +7,17 @@
   with_items:
     - git
     - java-1.7.0-openjdk-devel
+    - python-docker-py
 
-- name: Get install docker
+- name: Get get.docker.sh
   get_url:
     url: https://get.docker.com
     dest: /mnt/get-docker.sh
 
 - name: Install docker
-  command: /bin/sh /mnt/get-docker.sh
+# отрабатывает при каждом запуске - можно исправить - через headler добавить файл куданить шв 
+# добавить headler - создать файл-флаг в /tmp/already.get.docker
+  command: /bin/sh /mnt/get-docker.sh creates=/tmp/already.get.docker
 
 - name: Start docker
   systemd:
@@ -38,3 +41,12 @@
   git:
     repo: 'https://github.com/merabpyh/webprog.git'
     dest: /etc/webprog1/
+
+- name: Start proxy
+  docker:
+    name: proxy
+    image: jwilder/nginx-proxy:alpine
+    ports:
+     - "80:80"
+    volumes:
+     - /var/run/docker.sock:/tmp/docker.sock:ro

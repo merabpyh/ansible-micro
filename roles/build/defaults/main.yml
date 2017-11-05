@@ -1,2 +1,3 @@
 ---
-# defaults file for build
+
+work_dir: /etc/webprog1

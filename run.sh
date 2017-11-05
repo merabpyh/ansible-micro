@@ -1,4 +1,7 @@
 #!/bin/bash
 
-# запуск плейбука
-ansible-playbook -K mainbook.yml -vv
+
+# указать роль при запуске
+# build, checking, checkout, deploy, rollback, setup, testing
+
+ansible-playbook -K mainbook.yml --tags=$1 -vv

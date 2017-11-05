@@ -1,18 +1,18 @@
 ---
 
 - name: Run the mainbook
-  hosts: 192.168.1.31
-  user: docker
+  hosts: test-onefactor-centos7
+  user: roman
   sudo: yes
   roles:
 
-# установка всего и вся на хосте
+# установка всего и вся на хосте + запуск proxy
     - { role: setup, tags: setup }
 
-# pull репы и сборка проекта и контейнера
+# pull репы и сборка проекта, контейнера
     - { role: build, tags: build }
 
-# выкат новых контейнеров
+# выкат новых контейнеров c проверкой
     - { role: deploy, tags: deploy }
 
 # откат на версию назад

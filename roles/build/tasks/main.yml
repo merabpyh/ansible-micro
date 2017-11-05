@@ -1,6 +1,59 @@
 ---
 
-- name: test build
-  command: echo 'test'
+- name: Clone webprog1 repo from github if needed
+  git:
+    repo: 'https://github.com/merabpyh/webprog.git'
+    dest: /etc/webprog1/
+  tags:
+    - checkout
 
+- name: Clean workplace
+  command: ./gradlew clean chdir="{{ work_dir }}"
 
+- name: Do build
+  command: ./gradlew build chdir="{{ work_dir }}"
+
+#  пакет не нужен - пока?
+#- name: Build rpm package
+#  command: ./gradlew buildRpm chdir="{{ work_dir }}"
+
+- name: Grab lib version
+  shell: ls *.jar | sed 's/webprog-//g' | sed 's/\.jar//g' chdir="{{ work_dir }}/build/libs"
+  register: version
+
+- name: Put Dockerfile
+  template:
+    src: Dockerfile
+    dest: "{{ work_dir }}"
+
+- name: Building container
+  docker_image:
+   path: "{{ work_dir }}"
+   name: app
+   tag: "{{ item }}"
+  with_items:
+    - "{{ version.stdout_lines }}"
+    - "latest"
+
+- name: Test run 
+  docker:
+#    name: app
+    image: app:latest
+    env:
+      VIRTUAL_PORT: 8080
+      VIRTUAL_HOST: localhost
+  tags:
+    - testing
+
+- name: Check web service from container
+  shell: sleep 3s | curl localhost/ping
+  tags:
+    - testing
+    - checking
+
+- name: Stop test run
+  docker:
+    image: app:latest
+    state: stopped
+  tags:
+    - testing

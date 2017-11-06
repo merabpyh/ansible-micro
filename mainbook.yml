@@ -6,8 +6,8 @@
 # хост (передавать пароль на sudo и ssh - если без сертификата)
 # пользователя (должны быть docker wheel группы)
 #
-  hosts: {{ r_host }}
-  user: {{ r_user }}
+  hosts: "{{ r_host }}"
+  user: "{{ r_user }}"
   sudo: yes
   roles:
 

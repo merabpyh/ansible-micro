@@ -1,10 +1,10 @@
 # ansible-micro
 for minimal ci\cd https://github.com/merabpyh/webprog
 
-## Usage
+## Использование:
 TASK TAGS: [build, check, checkout, deploy, rollback, setup, test]
 
-ansible-playbook mainbook.yml --tags=setup
+ansible-playbook mainbook.yml --tags=setup --extra-vars "r_user=roman r_host=test-centos7" 
 
 Запускать следует от пользователя обладающего sudo привилегиями и главной группой docker.
 
@@ -23,6 +23,7 @@ ansible-playbook mainbook.yml --tags=setup
 --tags=checkout - склонирование репозитория
 
 ## Изветные проблемы:
+- поддерживается только centos6+ из-за использования модуля yum
 - необходимость передавать sudo пароль
 - организовывать связь до хоста - ssh пароль или доступ по сертификату
 - завести пользователя с главной группой docker и правами sudo

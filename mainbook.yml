@@ -1,7 +1,12 @@
 ---
 
 - name: Run the mainbook
-  hosts: test-onefactor-centos7
+
+# предопределить в вызове
+# хост (передавать пароль на sudo и ssh - если без сертификата)
+# пользователя (должны быть docker wheel группы)
+#
+  hosts: test-centos7
   user: roman
   sudo: yes
   roles:
@@ -9,11 +14,10 @@
 # установка всего и вся на хосте + запуск proxy
     - { role: setup, tags: setup }
 
-# pull репы и сборка проекта, контейнера
+# pull репы и сборка проекта, образа контейнера
     - { role: build, tags: build }
 
-# выкат новых контейнеров c проверкой
+# выкат новых контейнеров или старых, с проверкой
     - { role: deploy, tags: deploy }
 
-# откат на версию назад
-    - { role: rollback, tags: rollback }
+# роль rollback вызывать с передачей  версии (tag) образа контейнера

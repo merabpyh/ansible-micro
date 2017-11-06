@@ -1,2 +1,10 @@
 ---
-# handlers file for deploy
+
+- name: deploy on  prod
+  docker:
+    name: app-prod
+    image: "app:{{ version }}"
+    state: restarted
+    env:
+      VIRTUAL_PORT: 8080
+      VIRTUAL_HOST: localhost

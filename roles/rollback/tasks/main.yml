@@ -1,4 +1,0 @@
----
-
-- name: test rollback
-  command: echo 'test'

@@ -6,6 +6,7 @@
     dest: /etc/webprog1/
   tags:
     - checkout
+  ignore_errors: yes
 
 - name: Clean workplace
   command: ./gradlew clean chdir="{{ work_dir }}"
@@ -26,34 +27,39 @@
     src: Dockerfile
     dest: "{{ work_dir }}"
 
-- name: Building container
+- name: Building docker image
   docker_image:
    path: "{{ work_dir }}"
    name: app
+   state: present
+   force: yes
    tag: "{{ item }}"
   with_items:
     - "{{ version.stdout_lines }}"
     - "latest"
 
-- name: Test run 
+- name: Run test container
   docker:
-#    name: app
+    name: test-app
     image: app:latest
     env:
       VIRTUAL_PORT: 8080
-      VIRTUAL_HOST: localhost
+      VIRTUAL_HOST: test.localhost
   tags:
-    - testing
+    - test
 
+# стоит таймер на 20 сек, чтобы в контейнере успело стартануть приложение
+# прогревание проги на джаве даёт простой - тюнить таймауты в проксе
 - name: Check web service from container
-  shell: sleep 3s | curl localhost/ping
+  shell: sleep 20s && curl http://localhost -H "Host:test.localhost"
   tags:
-    - testing
-    - checking
+    - test
+    - check-test
 
 - name: Stop test run
   docker:
+    name: test-app
     image: app:latest
-    state: stopped
+    state: absent
   tags:
-    - testing
+    - test

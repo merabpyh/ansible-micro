@@ -3,7 +3,9 @@ for minimal ci\cd https://github.com/merabpyh/webprog
 
 ## Usage
 TASK TAGS: [build, check, checkout, deploy, rollback, setup, test]
+
 ansible-playbook mainbook.yml --tags=setup
+
 Запускать следует от пользователя обладающего sudo привилегиями и главной группой docker.
 
 --tags=setup - установка зависимостей, клонирование репозитория локально, запуск proxy
@@ -20,7 +22,7 @@ ansible-playbook mainbook.yml --tags=setup
 
 --tags=checkout - склонирование репозитория
 
-Изветные проблемы:
+## Изветные проблемы:
 - необходимость передавать sudo пароль
 - организовывать связь до хоста - ssh пароль или доступ по сертификату
 - завести пользователя с главной группой docker и правами sudo

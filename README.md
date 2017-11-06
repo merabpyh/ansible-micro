@@ -6,7 +6,7 @@ TASK TAGS: [build, check, checkout, deploy, rollback, setup, test]
 
 ansible-playbook mainbook.yml --tags=setup --extra-vars "r_user=roman r_host=test-centos7" 
 
-Запускать следует от пользователя обладающего sudo привилегиями и главной группой docker.
+Запускать следует от пользователя обладающего sudo привилегиями
 
 --tags=setup - установка зависимостей, клонирование репозитория локально, запуск proxy
 
@@ -24,9 +24,8 @@ ansible-playbook mainbook.yml --tags=setup --extra-vars "r_user=roman r_host=tes
 
 ## Изветные проблемы:
 - поддерживается только centos6+ из-за использования модуля yum
-- необходимость передавать sudo пароль
 - организовывать связь до хоста - ssh пароль или доступ по сертификату
-- завести пользователя с главной группой docker и правами sudo
+- завести пользователя с правами sudo и передавать sudo пароль
 - архитектурная проблема, при старте контейнера в java стартует spring обвязка - до 3-5 секунд,
 что требует паузы перед проверкой и ведёт к неизбежному простою (решается переписыванием приложения на GO например)
 - build:
@@ -35,3 +34,9 @@ ansible-playbook mainbook.yml --tags=setup --extra-vars "r_user=roman r_host=tes
     - при первом запуске двойная пересборка контейнера прода
 - rollback:
     - необходимость предопределять вручную версию отката из имеющихся тегов образов контейнеров
+
+## Пример команд:
+ansible-playbook -K mainbook.yml --tags=setup --extra-vars "r_host=test-centos7 r_user=roman"
+ansible-playbook -K mainbook.yml --tags=build --extra-vars "r_host=test-centos7 r_user=roman"
+ansible-playbook -K mainbook.yml --tags=deploy --extra-vars "r_host=test-centos7 r_user=roman"
+ansible-playbook -K mainbook.yml --tags=deploy --extra-vars "r_host=test-centos7 r_user=roman version=0.0.1a"
